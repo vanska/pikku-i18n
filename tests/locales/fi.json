@@ -1,0 +1,38 @@
+{
+	"404": {
+		"metaTitle": "404 meta title Finnish",
+		"slug": "404",
+		"title": "404 title Finnish"
+	},
+	"articles": {
+		"metaDescription": "Content metadescription text Finnish",
+		"metaTitle": "Content metatitle Finnish",
+		"slug": "content-finnish",
+		"title": "Content title Finnish"
+	},
+	"common": {
+		"title": "Common title Finnish"
+	},
+	"home": {
+		"countries": "Meillä on toimistoja yhteensä {{countryCount}} maassa ympäri Eurooppaa.",
+		"countryCount": "kolmessa",
+		"metaDescription": "Home metadescription text Finnish",
+		"metaTitle": "Home metatitle Finnish",
+		"title": "Home title Finnish"
+	},
+	"pre-deployment": {
+		"metaDescription": "Pre-Deployment metadescription text Finnish",
+		"metaTitle": "Pre-Deployment metatitle Finnish",
+		"slug": "pre-deployment-finnish",
+		"title": "Pre-Deployment title Finnish"
+	},
+	"privacy-notice": {
+		"title": "Privacy notice Finnish"
+	},
+	"workday-services": {
+		"metaDescription": "Workday services metadescription text Finnish",
+		"metaTitle": "Workday services metatitle Finnishh",
+		"slug": "workday-services-finnish",
+		"title": "Workday services title Finnish"
+	}
+}

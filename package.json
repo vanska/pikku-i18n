@@ -1,0 +1,28 @@
+{
+  "name": "pikku-i18n",
+  "version": "1.0.0",
+  "description": "Tiny i18n library for ES6 and React",
+  "author": "Mikko Vänskä <mikkovanska.com@gmail.com>",
+  "keywords": [
+    "i18n",
+    "react",
+    "gatsby"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/vanska/pikku-i18n.git"
+  },
+  "main": "./lib/i18n.js",
+  "license": "MIT",
+  "devDependencies": {
+    "yalc-watch": "0.0.6"
+  },
+  "scripts": {
+    "yalc-watch": "yalc-watch"
+  },
+  "yalcWatch": {
+    "watchFolder": "lib",
+    "buildWatchCommand": "echo 'Watching for file changes'",
+    "extensions": "js"
+  }
+}
