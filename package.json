@@ -12,7 +12,7 @@
     "type": "git",
     "url": "git+ssh://git@github.com/vanska/pikku-i18n.git"
   },
-  "main": "./lib/i18n.js",
+  "main": "./lib/index.js",
   "license": "MIT",
   "devDependencies": {
     "yalc-watch": "0.0.6"
