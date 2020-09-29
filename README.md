@@ -11,7 +11,10 @@ Features:
 - Assign language
 - Assign default namespace
 - Fetch any string from any namespace within the locale data
-- A tool for checking translation string lenghts
+
+Utility extras:
+
+- A NodeJS utility for testing i18n locale character count for words and paragraphs
 
 ## Install
 
@@ -122,7 +125,7 @@ t('keyWithStringInterpolation', { variable: 3 })
 t('keyWithStringInterpolation', { variable: t('countryCount') })
 ```
 
-### Trans
+### Trans component for React
 
 Replace a string variable with a react component.
 
@@ -191,6 +194,80 @@ const data = {
 i18n.use('en', 'home', data, true)
 ```
 
+## Testing i18n locale character count for words and paragraphs with NodeJS
+
+Some languages like German and Finnish can have extremely long words that can cause your layout to overflow containers causing layout shifts if not handled properly. Better to catch these mistakes as early as possible.
+
+> Max character count for visible text depends on your font family, size, spacing etc. and the space a container has. Usually the problem is pronounced with mobile devices with less horizontal space.
+
+Reasoning:
+
+- Avoid visual inconsistencies
+- The `hyphens` CSS property works poorly with any other language than English, cutting words at undesired locations
+- No need to set `overflow-x: hidden` CSS property
+- Integrate as a part of e.g. build process and commit checks
+
+### API
+
+```js
+checkLocaleStringLengths("path/to/locales", rulesArray)
+```
+
+### Usage
+
+```js
+// translations/test/index.js
+
+const { checkLocaleStringLengths } = require("pikku-i18n/lib/node-utils")
+
+checkLocaleStringLengths("translations/locales", [
+  {
+    level: "error", // Will throw an error that stops the Node process
+    type: "word", // Checks for total characters in single words
+    key: "title", // Key to be tested
+    maxCharacters: 20 // Max characters allowed.
+  },
+  {
+    level: "warning", // Only prints a warning to the console but doesn't halt the process
+    type: "paragraph", // Checks for total characters in a paragraph
+    key: "metaTitle",
+    maxCharacters: 60 // Sensible default for meta titles
+  },
+  {
+    level: "warning",
+    type: "paragraph",
+    key: "metaDescription",
+    maxCharacters: 300 // Sensible default for meta descriptions
+  }
+])
+```
+
+```js
+// package.json
+{
+  "scripts": {
+    "test-translations": "node ./translations/test/index.js"
+  }
+}
+```
+
+```terminal
+npm run test-translations
+```
+
+Example terminal output:
+
+```terminal
+✖ Error:
+=> fi.home.title
+String contains a word with too many characters!
+Character count of 61 for "Lentokonesuihkuturbiinimoottoriapumekaanikkoaliupseerioppilas" is more than the maximum character count of 20
+
+⚠ Warning:
+=> en.home.metaTitle
+Paragraph length of 80 is greater than set maximum of 60
+```
+
 ## Local package development with yalc
 
 ```bash
@@ -202,6 +279,7 @@ yalc link pikku-i18n
 ## Project roadmap
 
 - Separate modules
+- Typescript support
 - API to skip client side work
   - no re-rendering of SSR strings on initial page load
     - reduces TBT (Total blocking time)
