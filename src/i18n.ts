@@ -75,14 +75,14 @@ export const i18n = (function () {
 
     if (passedSubsCount !== strSubs.length) {
       throw new Error(
-        `Mismatch between string(${strSubs.length}) and passed substitutions (${passedSubsCount}) in ${ns}.${key}`
+        `Mismatch between string variables(${strSubs.length}) and passed substitutions(${passedSubsCount}) for ${ns}.${key}`
       )
     }
 
     return val.replace(m.subsRegEx, function (_, subsKey) {
       if (!subs[subsKey]) {
         throw new Error(
-          `Missing substitution variable {{${key}}} in ${ns}.${key}`
+          `Missing substitution variable from {{${key}}} in ${ns}.${key}`
         )
       }
       return subs[subsKey] && subs[subsKey]

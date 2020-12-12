@@ -44,29 +44,29 @@ plugins: [
 ## Using with React
 
 ```js
-import React from 'react'
-import i18n, { Trans } from 'vanska/pikku-i18n'
+import React from "react"
+import i18n, { Trans } from "vanska/pikku-i18n"
 
 export default function SomePage() {
-  i18n.use('en', 'namespace', localeData)
+  i18n.use("en", "namespace", localeData)
   const { t } = i18n
 
   return (
     <>
-      <h1>{t('someKey')}</h1>
-      <p>{t('keyWithStringInterpolation', { variable: 3 })}</p>
-      <p>{t('keyWithStringInterpolation', { variable: t('variable') })}</p>
+      <h1>{t("someKey")}</h1>
+      <p>{t("keyWithStringInterpolation", { variable: 3 })}</p>
+      <p>{t("keyWithStringInterpolation", { variable: t("variable") })}</p>
       <p>
         <Trans
           i18nKey="keyWithStringInterpolation"
-          variable={<strong key={'variableStrongId'}>666</strong>}
+          variable={<strong key={"variableStrongId"}>666</strong>}
         />
         <Trans
           i18nKey="keyWithStringInterpolation"
-          variable={<span key={'variableSpanId'}>{t('variable')}</span>}
+          variable={<span key={"variableSpanId"}>{t("variable")}</span>}
         />
       </p>
-      <p>{t('anotherNamespace:someKey')}</p>
+      <p>{t("anotherNamespace:someKey")}</p>
     </>
   )
 }
@@ -74,13 +74,15 @@ export default function SomePage() {
 
 ## i18n JSON format
 
+It's important all values are strings.
+
 ```json
 // en.json
 {
   "namespace": {
     "someKey": "This is some value",
     "keyWithStringInterpolation": "This is a value with a variable of {{variable}}",
-    "variable": 3
+    "variable": "3"
   },
   "anotherNamespace": {
     "someKey": "This is some key",
@@ -94,35 +96,35 @@ export default function SomePage() {
 ### .use(lang, defaultNamespace, data, \_isNodeObject)
 
 ```js
-import i18n from 'pikku-i18n'
+import i18n from "pikku-i18n"
 
 const data = {
   home: {
-    someKey: 'This is some value',
+    someKey: "This is some value",
     keyWithStringInterpolation:
-      'This is a value with a variable of {{variable}}',
+      "This is a value with a variable of {{variable}}",
     variable: 3
   },
   about: {
-    someKey: 'This is some key',
+    someKey: "This is some key",
     keyWithStringInterpolation:
-      'This is a value with a variable of {{variable}}'
+      "This is a value with a variable of {{variable}}"
   }
 }
 
-i18n.use('en', 'home', data)
+i18n.use("en", "home", data)
 ```
 
 ### .t(string, object)
 
 ```js
-import i18n from 'pikku-i18n'
+import i18n from "pikku-i18n"
 
 const { t } = i18n
 
-t('someKey')
-t('keyWithStringInterpolation', { variable: 3 })
-t('keyWithStringInterpolation', { variable: t('countryCount') })
+t("someKey")
+t("keyWithStringInterpolation", { variable: 3 })
+t("keyWithStringInterpolation", { variable: t("countryCount") })
 ```
 
 ### Trans component for React
@@ -143,23 +145,23 @@ const data = {
   i18nStatic: {
     nodes: [
       {
-        lang: 'fi',
-        namespace: 'common',
+        lang: "fi",
+        namespace: "common",
         allTranslations: '{"title":"Common title Finnish"}'
       },
       {
-        lang: 'fi',
-        namespace: 'privacy-notice',
+        lang: "fi",
+        namespace: "privacy-notice",
         allTranslations: '{"title":"Privacy notice Finnish"}'
       },
       {
-        lang: 'en',
-        namespace: 'common',
+        lang: "en",
+        namespace: "common",
         allTranslations: '{"title":"Common title English"}'
       },
       {
-        lang: 'en',
-        namespace: 'privacy-notice',
+        lang: "en",
+        namespace: "privacy-notice",
         allTranslations: '{"title":"Privacy notice English"}'
       }
     ]
@@ -167,7 +169,7 @@ const data = {
   i18nPage: {
     nodes: [
       {
-        namespace: 'home',
+        namespace: "home",
         allTranslations:
           '{"countries":"We\'re in {{countryCount}} countries around Europe.","countryCount":"3","metaDescription":"Home metadescription text English","metaTitle":"Home metatitle English","title":"Home title English"}'
       }
@@ -176,22 +178,22 @@ const data = {
   i18nAdditions: {
     nodes: [
       {
-        namespace: 'design',
+        namespace: "design",
         singleTranslations: {
-          title: 'Design title English'
+          title: "Design title English"
         }
       },
       {
-        namespace: 'services',
+        namespace: "services",
         singleTranslations: {
-          title: 'Services title English'
+          title: "Services title English"
         }
       }
     ]
   }
 }
 
-i18n.use('en', 'home', data, true)
+i18n.use("en", "home", data, true)
 ```
 
 ## Testing i18n locale character count for words and paragraphs with NodeJS
