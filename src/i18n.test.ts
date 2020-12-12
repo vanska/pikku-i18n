@@ -6,14 +6,23 @@ const withCorrectData = (function () {
   const localeData = {
     namespace: {
       someKey: "This is some value",
-      keyWithStringInterpolation:
-        "This is a value with a variable of {{variable}}",
-      variable: "3"
+      keyWithSingleStringInterpolation:
+        "This is a value with variable {{variable1}}.",
+      keyWithMultipleStringInterpolation:
+        "This is a value with variables {{variable1}}, {{variable2}} and {{variable3}}.",
+      variable1: "4",
+      variable2: "5",
+      variable3: "6"
     },
     anotherNamespace: {
       someKey: "This is some key",
-      keyWithStringInterpolation:
-        "This is a value with a variable of {{variable}}"
+      keyWithSingleStringInterpolation:
+        "This is a value with variable {{variable1}}.",
+      keyWithMultipleStringInterpolation:
+        "This is a value with variables {{variable1}}, {{variable2}} and {{variable3}}.",
+      variable1: "4",
+      variable2: "5",
+      variable3: "6"
     }
   }
 
@@ -49,7 +58,7 @@ const withCorrectData = (function () {
   })
 
   test(`t() returns a non-string variable`, () => {
-    expect(t("variable")).toBe(localeData.namespace.variable)
+    expect(t("variable1")).toBe(localeData.namespace.variable1)
   })
 
   test(`t() returns a key from a non-default namespace with a single attribute`, () => {
@@ -58,16 +67,50 @@ const withCorrectData = (function () {
     )
   })
 
-  test(`t() returns an interpolated string with a defined variable`, () => {
-    expect(t("keyWithStringInterpolation", { variable: 1 })).toBe(
-      "This is a value with a variable of 1"
-    )
+  test(`t() returns an interpolated string with a single substitution variable`, () => {
+    expect(
+      t("keyWithSingleStringInterpolation", {
+        variable1: "1"
+      })
+    ).toBe("This is a value with variable 1.")
   })
 
-  test(`t() returns an interpolated string with t() as variable`, () => {
-    expect(t("keyWithStringInterpolation", { variable: t("variable") })).toBe(
-      "This is a value with a variable of 3"
-    )
+  test(`t() returns an interpolated string with a single substitution variable with t() inside attribute object`, () => {
+    expect(
+      t("keyWithSingleStringInterpolation", {
+        variable1: t("variable1")
+      })
+    ).toBe("This is a value with variable 4.")
+  })
+
+  test(`t() returns an interpolated string with multiple defined variables`, () => {
+    expect(
+      t("keyWithMultipleStringInterpolation", {
+        variable1: "1",
+        variable2: "2",
+        variable3: "3"
+      })
+    ).toBe("This is a value with variables 1, 2 and 3.")
+  })
+
+  test(`t() returns an interpolated string with multiple t() as attribute`, () => {
+    expect(
+      t("keyWithMultipleStringInterpolation", {
+        variable1: t("variable1"),
+        variable2: t("variable2"),
+        variable3: t("variable3")
+      })
+    ).toBe("This is a value with variables 4, 5 and 6.")
+  })
+
+  test(`t() returns an interpolated string with mixed substitution variables`, () => {
+    expect(
+      t("keyWithMultipleStringInterpolation", {
+        variable1: "1",
+        variable2: t("variable2"),
+        variable3: "3"
+      })
+    ).toBe("This is a value with variables 1, 5 and 3.")
   })
 
   // t() errors
@@ -81,16 +124,20 @@ const withCorrectData = (function () {
   })
 
   test(`t() throws an error when variable count is different between passed attributes for t() and target value`, () => {
-    expect(() => t("keyWithStringInterpolation")).toThrow(
-      "Mismatch between string variables(1) and passed substitutions(0) for namespace.keyWithStringInterpolation"
+    expect(() => t("keyWithMultipleStringInterpolation")).toThrow(
+      "Mismatch between string variables(3) and passed substitutions(0) for namespace.keyWithMultipleStringInterpolation"
     )
   })
 
   test(`t() throws an error when substitution variable key name is wrong`, () => {
     expect(() =>
-      t("keyWithStringInterpolation", { variableWithWrongName: "3" })
+      t("keyWithMultipleStringInterpolation", {
+        variable1WithWrongName: t("variable1"),
+        variable2: t("variable2"),
+        variable3: t("variable3")
+      })
     ).toThrow(
-      "Missing substitution variable from {{keyWithStringInterpolation}} in namespace.keyWithStringInterpolation"
+      "Missing substitution variable from {{keyWithMultipleStringInterpolation}} in namespace.keyWithMultipleStringInterpolation"
     )
   })
 })()
