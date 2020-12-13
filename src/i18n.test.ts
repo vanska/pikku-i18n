@@ -1,4 +1,4 @@
-const { i18n } = require("./index")
+import { use, t, defaultNS, lang, resources } from "./index"
 
 const withCorrectData = (function () {
   const testLang = "en"
@@ -26,13 +26,13 @@ const withCorrectData = (function () {
     }
   }
 
-  const { use } = i18n
+  // const { use } = i18n
 
   use(testLang, testDefaultNs, localeData, false)
 
   // Needs to be desctructured after use()
 
-  const { defaultNS, lang, resources, t } = i18n
+  // const { defaultNS, lang, resources, t } = i18n
 
   test(`lang returns correct language set in use()`, () => {
     expect(lang).toBe(testLang)

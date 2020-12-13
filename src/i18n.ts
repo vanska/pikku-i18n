@@ -1,9 +1,6 @@
-import { IM } from "./types"
+import * as store from "./store"
 
-let defaultNS = ""
-let resources = {}
-let lang = ""
-const SUBS_REG_EX = new RegExp(/\{{([^{]+)}}/g)
+export const SUBS_REG_EX = new RegExp(/\{{([^{]+)}}/g)
 
 const createI18nResources = function (d) {
   let { i18nStatic, i18nPage, i18nAdditions } = d
@@ -27,26 +24,28 @@ const createI18nResources = function (d) {
   return r
 }
 
-const use = function (
+export const use = function (
   lang: string,
   dns: string,
   data: any,
   isNodeData: boolean
 ): void {
-  lang = lang
-  defaultNS = dns
-  resources = isNodeData ? createI18nResources(data) : data
+  store.setLang(lang)
+  store.setDefaultNS(dns)
+  store.setResources(isNodeData ? createI18nResources(data) : data)
 }
 
-const t = function (str, subs, trans) {
+export const t = function (str, subs, trans) {
   let strSplit, key, ns, val
   if (typeof str === "string") {
     if (str.length > 0) {
       strSplit = str.split(":") // Split string into array
       key = strSplit.length > 1 ? strSplit[1] : strSplit[0]
       ns =
-        strSplit.length > 1 && strSplit[0].length > 0 ? strSplit[0] : defaultNS
-      val = resources && resources[ns][key]
+        strSplit.length > 1 && strSplit[0].length > 0
+          ? strSplit[0]
+          : store.defaultNS
+      val = store.resources && store.resources[ns][key]
     } else {
       throw new Error(`Key string is empty.`)
     }
@@ -59,7 +58,7 @@ const t = function (str, subs, trans) {
   }
 
   // Check for namespace
-  if (!resources[ns]) {
+  if (!store.resources[ns]) {
     throw new Error(`Namespace not found: ${ns}`)
   }
   // Check string exists
@@ -87,7 +86,3 @@ const t = function (str, subs, trans) {
     return subs[subsKey] && subs[subsKey]
   })
 }
-
-const getDefaultNS = defaultNS
-
-export const i18n = { getDefaultNS, resources, lang, SUBS_REG_EX, use, t }

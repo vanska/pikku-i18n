@@ -1,4 +1,2 @@
-import { i18n } from "./i18n"
-// import { Trans } from "./Trans"
-
-export { i18n }
+export { SUBS_REG_EX, use, t } from "./i18n"
+export { defaultNS, lang, resources } from "./store"
