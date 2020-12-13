@@ -3,13 +3,13 @@ export let resources: any = {}
 export let lang = ""
 export const SUBS_REG_EX = new RegExp(/\{{([^{]+)}}/g)
 
-export const use = function (l: string, dns: string, data: any): void {
+export const use = function (l: string, dns: string, data: {}): void {
   lang = l
   defaultNS = dns
   resources = data
 }
 
-export const t = function (str: string, subs?: any, trans?: boolean) {
+export const t = function (str: string, subs?: {}, trans?: boolean) {
   let strSplit, key, ns, val
   if (str.length > 0) {
     strSplit = str.split(":") // Split string into array
@@ -44,12 +44,14 @@ export const t = function (str: string, subs?: any, trans?: boolean) {
     )
   }
 
-  return val.replace(SUBS_REG_EX, function (_, subsKey) {
-    if (!subs[subsKey]) {
-      throw new Error(
-        `Missing substitution variable from {{${key}}} in ${ns}.${key}`
-      )
+  return val.replace(SUBS_REG_EX, function (_, subsKey: string) {
+    if (subs) {
+      if (!subs[subsKey]) {
+        throw new Error(
+          `Missing substitution variable from {{${key}}} in ${ns}.${key}`
+        )
+      }
+      return subs[subsKey] && subs[subsKey]
     }
-    return subs[subsKey] && subs[subsKey]
   })
 }
