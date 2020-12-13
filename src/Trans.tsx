@@ -5,7 +5,7 @@ export const Trans = ({ i18nKey, ...rest }) => (
   <>
     {i18n
       .t(i18nKey, "", true)
-      .split(i18n.subsRegEx)
+      .split(i18n.SUBS_REG_EX)
       .reduce((prev: string[], current, i) => {
         if (!i) return [current]
         return prev.concat(
