@@ -31,7 +31,12 @@ export const i18n = (function () {
     return r
   }
 
-  m.use = function (lang, dns, data, isNodeData) {
+  m.use = function (
+    lang: string,
+    dns: string,
+    data: any,
+    isNodeData: boolean
+  ): void {
     m.lang = lang
     m.defaultNS = dns
     m.resources = isNodeData ? createI18nResources(data) : data
