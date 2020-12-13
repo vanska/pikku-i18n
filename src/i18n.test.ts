@@ -26,20 +26,14 @@ const withCorrectData = (function () {
     }
   }
 
-  // const { use } = i18n
-
-  use(testLang, testDefaultNs, localeData, false)
-
-  // Needs to be desctructured after use()
-
-  // const { defaultNS, lang, resources, t } = i18n
+  use(testLang, testDefaultNs, localeData)
 
   test(`lang returns correct language set in use()`, () => {
     expect(lang).toBe(testLang)
   })
 
-  test(`defaultNS returns set defaut namespace`, () => {
-    expect(defaultNS).toBe("namespace")
+  test(`defaultNS returns set default namespace`, () => {
+    expect(defaultNS).toBe(testDefaultNs)
   })
 
   // resources
@@ -118,10 +112,6 @@ const withCorrectData = (function () {
 
   test(`t() throws error on empty string`, () => {
     expect(() => t("")).toThrow("Key string is empty.")
-  })
-
-  test(`t() throws error on wrong type`, () => {
-    expect(() => t()).toThrow("Expected a string for key. Got undefined.")
   })
 
   test(`t() throws an error when variable count is different between passed attributes for t() and target value`, () => {

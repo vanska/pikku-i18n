@@ -280,8 +280,18 @@ yalc link pikku-i18n
 
 ## Project roadmap
 
-- Separate modules
+- ~~Convert to ES modules~~
 - Typescript support
-- API to skip client side work
-  - no re-rendering of SSR strings on initial page load
-    - reduces TBT (Total blocking time)
+  - ~~i18n core~~
+  - Trans
+- ~~Decrease execution time by accessing simple strings with dot notation instead of parsing everything~~
+  - ~~return the resources object for dot notation access when subsitution isn't needed~~
+- Tests
+  - ~~i18n~~
+  - Trans
+- Add support for infinite key nesting
+- Move createResources as an optional utility
+- Trans
+  - string substitution prop name needs to have an exact match with string variables
+  - automatically create unique keys inside Trans
+- Optional: SSR API for simple variable substitutions

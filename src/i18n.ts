@@ -1,56 +1,23 @@
-import * as store from "./store"
-
+export let defaultNS = ""
+export let resources: any = {}
+export let lang = ""
 export const SUBS_REG_EX = new RegExp(/\{{([^{]+)}}/g)
 
-const createI18nResources = function (d) {
-  let { i18nStatic, i18nPage, i18nAdditions } = d
-  let r = {}
-  if (i18nStatic) {
-    i18nStatic.nodes.forEach((n) => {
-      if (n.lang !== lang) return
-      r[n.namespace] = JSON.parse(n.allTranslations)
-    })
-  }
-  if (i18nPage) {
-    i18nPage.nodes.forEach((n) => {
-      r[n.namespace] = JSON.parse(n.allTranslations)
-    })
-  }
-  if (i18nAdditions) {
-    i18nAdditions.nodes.forEach((n) => {
-      r[n.namespace] = n.singleTranslations
-    })
-  }
-  return r
+export const use = function (l: string, dns: string, data: any): void {
+  lang = l
+  defaultNS = dns
+  resources = data
 }
 
-export const use = function (
-  lang: string,
-  dns: string,
-  data: any,
-  isNodeData: boolean
-): void {
-  store.setLang(lang)
-  store.setDefaultNS(dns)
-  store.setResources(isNodeData ? createI18nResources(data) : data)
-}
-
-export const t = function (str, subs, trans) {
+export const t = function (str: string, subs?: any, trans?: boolean) {
   let strSplit, key, ns, val
-  if (typeof str === "string") {
-    if (str.length > 0) {
-      strSplit = str.split(":") // Split string into array
-      key = strSplit.length > 1 ? strSplit[1] : strSplit[0]
-      ns =
-        strSplit.length > 1 && strSplit[0].length > 0
-          ? strSplit[0]
-          : store.defaultNS
-      val = store.resources && store.resources[ns][key]
-    } else {
-      throw new Error(`Key string is empty.`)
-    }
+  if (str.length > 0) {
+    strSplit = str.split(":") // Split string into array
+    key = strSplit.length > 1 ? strSplit[1] : strSplit[0]
+    ns = strSplit.length > 1 && strSplit[0].length > 0 ? strSplit[0] : defaultNS
+    val = resources && resources[ns][key]
   } else {
-    throw new Error(`Expected a string for key. Got ${typeof str}.`)
+    throw new Error(`Key string is empty.`)
   }
   // Skip interpolation for Trans component
   if (trans) {
@@ -58,7 +25,7 @@ export const t = function (str, subs, trans) {
   }
 
   // Check for namespace
-  if (!store.resources[ns]) {
+  if (!resources[ns]) {
     throw new Error(`Namespace not found: ${ns}`)
   }
   // Check string exists
