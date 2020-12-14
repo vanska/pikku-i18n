@@ -9,6 +9,7 @@
     "rootDir": "src",
     "sourceMap": false,
     "strict": true,
+    "resolveJsonModule": true,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "noImplicitReturns": true,
@@ -21,11 +22,6 @@
   "include": ["src/**/*"],
   "exclude": [
     "node_modules",
-    "lib",
-    "**/__tests__/**/*",
-    "**/__stories__/**/*",
-    "*.test.ts",
-    "*.test.tsx",
-    "**/*.spec.ts"
+    "lib"
   ]
 }

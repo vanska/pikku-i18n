@@ -1,0 +1,18 @@
+{
+  "namespace": {
+    "someKey": "This is some value",
+    "keyWithSingleStringInterpolation": "This is a value with variable {{variable1}}.",
+    "keyWithMultipleStringInterpolation": "This is a value with variables {{variable1}}, {{variable2}} and {{variable3}}.",
+    "variable1": "4",
+    "variable2": "5",
+    "variable3": "6"
+  },
+  "anotherNamespace": {
+    "someKey": "This is some key",
+    "keyWithSingleStringInterpolation": "This is a value from anotherNamespace with variable {{variable1}}.",
+    "keyWithMultipleStringInterpolation": "This is a value from anotherNamespace with variables {{variable1}}, {{variable2}} and {{variable3}}.",
+    "variable1": "4",
+    "variable2": "5",
+    "variable3": "6"
+  }
+}

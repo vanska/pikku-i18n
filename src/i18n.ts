@@ -19,11 +19,6 @@ export const t = function (str: string, subs?: {}, trans?: boolean) {
   } else {
     throw new Error(`Key string is empty.`)
   }
-  // Skip interpolation for Trans component
-  if (trans) {
-    return val
-  }
-
   // Check for namespace
   if (!resources[ns]) {
     throw new Error(`Namespace not found: ${ns}`)
@@ -31,6 +26,10 @@ export const t = function (str: string, subs?: {}, trans?: boolean) {
   // Check string exists
   if (!val) {
     throw new Error(`No string found! ${ns}.${key}`)
+  }
+  // Skip interpolation for Trans component
+  if (trans) {
+    return val
   }
 
   let strSubs = val.match(SUBS_REG_EX)

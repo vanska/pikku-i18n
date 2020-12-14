@@ -280,6 +280,8 @@ yalc link pikku-i18n
 
 ## Project roadmap
 
+- use()
+  - Throw error for incorrect data structure
 - ~~Convert to ES modules~~
 - Typescript support
   - ~~i18n core~~
@@ -287,11 +289,15 @@ yalc link pikku-i18n
 - ~~Decrease execution time by accessing simple strings with dot notation instead of parsing everything~~
   - ~~return the resources object for dot notation access when subsitution isn't needed~~
 - Tests
-  - ~~i18n~~
-  - Trans
+  - Add tests for incorrect locale data
+  - i18n
+    - use()
+      - toThrow for incorrect locale data
+  - ~~Trans~~
 - Add support for infinite key nesting
 - Move createResources as an optional utility
 - Trans
   - string substitution prop name needs to have an exact match with string variables
   - automatically create unique keys inside Trans
+  - access strings from any namespace
 - Optional: SSR API for simple variable substitutions
