@@ -209,7 +209,7 @@ Reasoning:
 - No need to set `overflow-x: hidden` CSS property
 - Integrate as a part of e.g. build process and commit checks
 
-### API
+### Node utils
 
 ```js
 checkLocaleStringLengths("path/to/locales", rulesArray)

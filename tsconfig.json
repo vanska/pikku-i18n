@@ -7,6 +7,7 @@
     "declaration": true,
     "pretty": true,
     "rootDir": "src",
+    "types": ["jest", "node"],
     "sourceMap": false,
     "strict": true,
     "resolveJsonModule": true,
@@ -22,6 +23,11 @@
   "include": ["src/**/*"],
   "exclude": [
     "node_modules",
-    "lib"
+    "lib",
+    "**/__tests__/**/*",
+    "**/__stories__/**/*",
+    "*.test.ts",
+    "*.test.tsx",
+    "**/*.spec.ts"
   ]
 }
