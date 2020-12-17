@@ -283,9 +283,11 @@ yalc link pikku-i18n
 - use()
   - Throw error for incorrect data structure
 - ~~Convert to ES modules~~
-- Typescript support
-  - ~~i18n core~~
+- Typescript
+  - t()
+    - Add min string lengths to types
   - Trans
+    - Throw type error on any value other than i18nKey or ns that is not a ReactNode
 - ~~Decrease execution time by accessing simple strings with dot notation instead of parsing everything~~
   - ~~return the resources object for dot notation access when subsitution isn't needed~~
 - Tests

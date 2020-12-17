@@ -1,9 +1,17 @@
-import React from "react"
+import React, { ReactNode } from "react"
 import { t, SUBS_REG_EX } from "./i18n"
 
-export const Trans = ({ i18nKey, ...rest }) => (
+export const Trans = ({
+  i18nKey,
+  ns,
+  ...rest
+}: {
+  i18nKey: string
+  ns?: string
+  [key: string]: any
+}) => (
   <>
-    {t(i18nKey, "", true)
+    {t(i18nKey, null, ns, true)
       .split(SUBS_REG_EX)
       .reduce((prev: string[], current, i) => {
         if (!i) return [current]

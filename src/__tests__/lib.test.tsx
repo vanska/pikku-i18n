@@ -33,6 +33,12 @@ const withCorrectData = (function () {
       test(`resources strings should be available with dot notation`, () => {
         expect(resources.namespace.someKey).toBe(localeData.namespace.someKey)
       })
+
+      test(`resources strings should resturn deeply nested values`, () => {
+        expect(resources.namespace.nestedKey.insideNestedKey).toBe(
+          localeData.namespace.nestedKey.insideNestedKey
+        )
+      })
     })
 
     describe("{ t }", () => {
@@ -40,13 +46,25 @@ const withCorrectData = (function () {
         expect(t("someKey")).toBe(localeData.namespace.someKey)
       })
 
+      test(`t() returns a simple nested key from the default namespace`, () => {
+        expect(t("nestedKey.insideNestedKey")).toBe(
+          localeData.namespace.nestedKey.insideNestedKey
+        )
+      })
+
       test(`t() returns a non-string variable`, () => {
         expect(t("variable1")).toBe(localeData.namespace.variable1)
       })
 
       test(`t() returns a key from a non-default namespace with a single attribute`, () => {
-        expect(t("anotherNamespace:someKey")).toBe(
+        expect(t("someKey", null, "anotherNamespace")).toBe(
           localeData.anotherNamespace.someKey
+        )
+      })
+
+      test(`t() returns a nested key from a non-default namespace`, () => {
+        expect(t("nestedKey.insideNestedKey", null, "anotherNamespace")).toBe(
+          localeData.anotherNamespace.nestedKey.insideNestedKey
         )
       })
 
@@ -138,7 +156,8 @@ const withCorrectData = (function () {
       test("should return the correct locale value from another namespace", () => {
         render(
           <Trans
-            i18nKey="anotherNamespace:keyWithSingleStringInterpolation"
+            i18nKey="keyWithSingleStringInterpolation"
+            ns="anotherNamespace"
             variable1={<strong key={KEY_STRONG}>123</strong>}
           />
         )

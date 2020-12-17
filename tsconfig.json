@@ -18,7 +18,8 @@
     "noFallthroughCasesInSwitch": true,
     "outDir": "lib",
     "lib": ["es2015", "dom"],
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "removeComments": true,
   },
   "include": ["src/**/*"],
   "exclude": [

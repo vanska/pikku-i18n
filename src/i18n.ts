@@ -9,13 +9,23 @@ export const use = function (l: string, dns: string, data: {}): void {
   resources = data
 }
 
-export const t = function (str: string, subs?: {}, trans?: boolean) {
-  let strSplit, key, ns, val
+export const t = function (
+  str: string,
+  subs?: {} | null,
+  nsO?: string | null,
+  trans?: boolean
+) {
+  let key: string, keys: string[], ns: string, val: string
   if (str.length > 0) {
-    strSplit = str.split(":") // Split string into array
-    key = strSplit.length > 1 ? strSplit[1] : strSplit[0]
-    ns = strSplit.length > 1 && strSplit[0].length > 0 ? strSplit[0] : defaultNS
-    val = resources && resources[ns][key]
+    // Check for empty namespace override
+    if (nsO && nsO.length === 0) {
+      throw new Error(`Namespace override doesn't exist for ${str}`)
+    }
+    // Set namespace override if it exists
+    ns = nsO ? nsO : defaultNS
+    keys = str.split(".")
+    val = keys.reduce((p, c) => p?.[c], resources[ns])
+    // val = resources && resources[ns][key]
   } else {
     throw new Error(`Key string is empty.`)
   }
@@ -25,7 +35,7 @@ export const t = function (str: string, subs?: {}, trans?: boolean) {
   }
   // Check string exists
   if (!val) {
-    throw new Error(`No string found! ${ns}.${key}`)
+    throw new Error(`No string found! ${ns}.${keys}`)
   }
   // Skip interpolation for Trans component
   if (trans) {
@@ -39,7 +49,7 @@ export const t = function (str: string, subs?: {}, trans?: boolean) {
 
   if (passedSubsCount !== strSubs.length) {
     throw new Error(
-      `Mismatch between string variables(${strSubs.length}) and passed substitutions(${passedSubsCount}) for ${ns}.${key}`
+      `Mismatch between string variables(${strSubs.length}) and passed substitutions(${passedSubsCount}) for ${ns}.${keys}`
     )
   }
 
@@ -47,7 +57,7 @@ export const t = function (str: string, subs?: {}, trans?: boolean) {
     if (subs) {
       if (!subs[subsKey]) {
         throw new Error(
-          `Missing substitution variable from {{${key}}} in ${ns}.${key}`
+          `Missing substitution variable from {{${keys}}} in ${ns}.${keys}`
         )
       }
       return subs[subsKey] && subs[subsKey]

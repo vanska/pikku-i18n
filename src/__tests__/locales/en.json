@@ -5,7 +5,10 @@
     "keyWithMultipleStringInterpolation": "This is a value with variables {{variable1}}, {{variable2}} and {{variable3}}.",
     "variable1": "4",
     "variable2": "5",
-    "variable3": "6"
+    "variable3": "6",
+    "nestedKey": {
+      "insideNestedKey": "This is the value inside nested key"
+    }
   },
   "anotherNamespace": {
     "someKey": "This is some key",
@@ -13,6 +16,9 @@
     "keyWithMultipleStringInterpolation": "This is a value from anotherNamespace with variables {{variable1}}, {{variable2}} and {{variable3}}.",
     "variable1": "4",
     "variable2": "5",
-    "variable3": "6"
+    "variable3": "6",
+    "nestedKey": {
+      "insideNestedKey": "This is the value inside nested key from anotherNamespace"
+    }
   }
 }
