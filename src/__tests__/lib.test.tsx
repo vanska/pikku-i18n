@@ -1,6 +1,6 @@
 import React from "react"
 
-import { use, t, defaultNS, lang, resources, Trans } from "../index"
+import { init, t, defaultNS, lang, resources, Trans } from "../index"
 import localeData from "./locales/en.json"
 
 import { render } from "@testing-library/react"
@@ -14,11 +14,11 @@ const withCorrectData = (function () {
   const testLang = "en"
   const testDefaultNs = "namespace"
 
-  use(testLang, testDefaultNs, localeData)
+  init(testLang, testDefaultNs, localeData)
 
-  describe("{ use } with correct locale data", () => {
+  describe("{ init } with correct locale data", () => {
     describe("{ lang, defaultNs, resources }", () => {
-      test(`lang returns correct language set in use()`, () => {
+      test(`lang returns correct language set in init()`, () => {
         expect(lang).toBe(testLang)
       })
 

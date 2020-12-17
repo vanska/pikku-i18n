@@ -48,7 +48,7 @@ import React from "react"
 import i18n, { Trans } from "vanska/pikku-i18n"
 
 export default function SomePage() {
-  i18n.use("en", "namespace", localeData)
+  i18n.init("en", "namespace", localeData)
   const { t } = i18n
 
   return (
@@ -93,7 +93,7 @@ It's important all values are strings.
 
 ## API
 
-### .use(lang, defaultNamespace, data, \_isNodeObject)
+### .init(lang, defaultNamespace, data, \_isNodeObject)
 
 ```js
 import i18n from "pikku-i18n"
@@ -112,7 +112,7 @@ const data = {
   }
 }
 
-i18n.use("en", "home", data)
+i18n.init("en", "home", data)
 ```
 
 ### .t(string, object)
@@ -193,7 +193,7 @@ const data = {
   }
 }
 
-i18n.use("en", "home", data, true)
+i18n.init("en", "home", data, true)
 ```
 
 ## Testing i18n locale character count for words and paragraphs with NodeJS
@@ -280,7 +280,7 @@ yalc link pikku-i18n
 
 ## Project roadmap
 
-- use()
+- init()
   - Throw error for incorrect data structure
 - ~~Convert to ES modules~~
 - Typescript
@@ -293,7 +293,7 @@ yalc link pikku-i18n
 - Tests
   - Add tests for incorrect locale data
   - i18n
-    - use()
+    - init()
       - toThrow for incorrect locale data
   - ~~Trans~~
 - Add support for infinite key nesting

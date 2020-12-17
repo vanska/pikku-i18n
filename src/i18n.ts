@@ -3,7 +3,7 @@ export let resources: any = {}
 export let lang = ""
 export const SUBS_REG_EX = new RegExp(/\{{([^{]+)}}/g)
 
-export const use = function (l: string, dns: string, data: {}): void {
+export const init = function (l: string, dns: string, data: {}): void {
   lang = l
   defaultNS = dns
   resources = data
