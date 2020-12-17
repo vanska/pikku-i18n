@@ -1,6 +1,6 @@
+export let lang = ""
 export let defaultNS = ""
 export let resources: any = {}
-export let lang = ""
 export const SUBS_REG_EX = new RegExp(/\{{([^{]+)}}/g)
 
 export const init = function (l: string, dns: string, data: {}): void {
@@ -15,7 +15,7 @@ export const t = function (
   nsO?: string | null,
   trans?: boolean
 ) {
-  let key: string, keys: string[], ns: string, val: string
+  let keyPath: string[], ns: string, val: string
   if (str.length > 0) {
     // Check for empty namespace override
     if (nsO && nsO.length === 0) {
@@ -23,8 +23,8 @@ export const t = function (
     }
     // Set namespace override if it exists
     ns = nsO ? nsO : defaultNS
-    keys = str.split(".")
-    val = keys.reduce((p, c) => p?.[c], resources[ns])
+    keyPath = str.split(".")
+    val = keyPath.reduce((p, c) => p?.[c], resources[ns])
   } else {
     throw new Error(`Key string is empty.`)
   }
@@ -34,7 +34,7 @@ export const t = function (
   }
   // Check string exists
   if (!val) {
-    throw new Error(`No string found! ${ns}.${keys}`)
+    throw new Error(`No string found! ${ns}.${keyPath}`)
   }
   // Skip interpolation for Trans component
   if (trans) {
@@ -48,7 +48,7 @@ export const t = function (
 
   if (passedSubsCount !== strSubs.length) {
     throw new Error(
-      `Mismatch between string variables(${strSubs.length}) and passed substitutions(${passedSubsCount}) for ${ns}.${keys}`
+      `Mismatch between string variables(${strSubs.length}) and passed substitutions(${passedSubsCount}) for ${ns}.${keyPath}`
     )
   }
 
@@ -56,7 +56,7 @@ export const t = function (
     if (subs) {
       if (!subs[subsKey]) {
         throw new Error(
-          `Missing substitution variable from {{${keys}}} in ${ns}.${keys}`
+          `Missing substitution variable from {{${keyPath}}} in ${ns}.${keyPath}`
         )
       }
       return subs[subsKey] && subs[subsKey]
