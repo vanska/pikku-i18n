@@ -7,7 +7,8 @@
     "variable2": "5",
     "variable3": "6",
     "nestedKey": {
-      "insideNestedKey": "This is the value inside nested key"
+      "insideNestedKey": "This is the value inside nested key",
+      "keyWithSingleStringInterpolationInsideNestedKey": "This is a nested key value with {{variable1}}"
     }
   },
   "anotherNamespace": {
@@ -18,7 +19,8 @@
     "variable2": "5",
     "variable3": "6",
     "nestedKey": {
-      "insideNestedKey": "This is the value inside nested key from anotherNamespace"
+      "insideNestedKey": "This is the value inside nested key from anotherNamespace",
+      "keyWithSingleStringInterpolationInsideNestedKey": "This is the {{variable1}} inside nested key from anotherNamespace"
     }
   }
 }

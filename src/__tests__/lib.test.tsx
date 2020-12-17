@@ -76,6 +76,14 @@ const withCorrectData = (function () {
         ).toBe("This is a value with variable 1.")
       })
 
+      test(`t() returns an interpolated string with a single substitution variable from with nested key`, () => {
+        expect(
+          t("nestedKey.keyWithSingleStringInterpolationInsideNestedKey", {
+            variable1: "1"
+          })
+        ).toBe("This is a nested key value with 1")
+      })
+
       test(`t() returns an interpolated string with a single substitution variable with t() inside attribute object`, () => {
         expect(
           t("keyWithSingleStringInterpolation", {
