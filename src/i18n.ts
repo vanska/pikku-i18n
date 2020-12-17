@@ -25,7 +25,6 @@ export const t = function (
     ns = nsO ? nsO : defaultNS
     keys = str.split(".")
     val = keys.reduce((p, c) => p?.[c], resources[ns])
-    // val = resources && resources[ns][key]
   } else {
     throw new Error(`Key string is empty.`)
   }

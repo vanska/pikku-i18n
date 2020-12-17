@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react"
+import React from "react"
 import { t, SUBS_REG_EX } from "./i18n"
 
 export const Trans = ({
