@@ -280,6 +280,9 @@ yalc link pikku-i18n
 
 ## Project roadmap
 
+- Semantic release
+- yalc-watch build
+- NPM build on install
 - init()
   - Throw error for incorrect data structure
 - ~~Convert to ES modules~~
