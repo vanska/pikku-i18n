@@ -56,7 +56,7 @@ export const t = function (
     if (subs) {
       if (!subs[subsKey]) {
         throw new Error(
-          `Missing substitution variable from {{${keyPath}}} in ${ns}.${keyPath}`
+          `Missing substitution variable {{${subsKey}}} in ${ns}.${keyPath}`
         )
       }
       return subs[subsKey] && subs[subsKey]

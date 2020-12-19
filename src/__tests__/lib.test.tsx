@@ -6,13 +6,17 @@ import localeData from "./locales/en.json"
 import { render } from "@testing-library/react"
 import { screen } from "@testing-library/dom"
 
-const KEY_STRONG = "key_strong"
-const KEY_SPAN = "key_span"
-const KEY_B = "key_b"
+const KEY_STRONG = "key_strong",
+  KEY_SPAN = "key_span",
+  KEY_HELSINKI = "Helsinki",
+  KEY_NEW_YORK = "New York",
+  KEY_NEW_DELHI = "New Delhi",
+  KEY_CARS_COUNT = "carsCountKey",
+  KEY_SERVICE_TYPE = "serviceTypeKey"
 
 const withCorrectData = (function () {
   const testLang = "en"
-  const testDefaultNs = "namespace"
+  const testDefaultNs = "home"
 
   init(testLang, testDefaultNs, localeData)
 
@@ -31,95 +35,97 @@ const withCorrectData = (function () {
       })
 
       test(`resources strings should be available with dot notation`, () => {
-        expect(resources.namespace.someKey).toBe(localeData.namespace.someKey)
+        expect(resources[testDefaultNs].title).toBe(
+          localeData[testDefaultNs].title
+        )
       })
 
       test(`resources strings should resturn deeply nested values`, () => {
-        expect(resources.namespace.nestedKey.insideNestedKey).toBe(
-          localeData.namespace.nestedKey.insideNestedKey
+        expect(resources[testDefaultNs].testimonials.customers.john.quote).toBe(
+          localeData[testDefaultNs].testimonials.customers.john.quote
         )
       })
     })
 
     describe("{ t }", () => {
       test(`t() returns a simple key from the default namespace with a single attribute`, () => {
-        expect(t("someKey")).toBe(localeData.namespace.someKey)
+        expect(t("title")).toBe(localeData[testDefaultNs].title)
       })
 
       test(`t() returns a simple nested key from the default namespace`, () => {
-        expect(t("nestedKey.insideNestedKey")).toBe(
-          localeData.namespace.nestedKey.insideNestedKey
+        expect(t("testimonials.customers.john.quote")).toBe(
+          localeData[testDefaultNs].testimonials.customers.john.quote
         )
-      })
-
-      test(`t() returns a non-string variable`, () => {
-        expect(t("variable1")).toBe(localeData.namespace.variable1)
       })
 
       test(`t() returns a key from a non-default namespace with a single attribute`, () => {
-        expect(t("someKey", null, "anotherNamespace")).toBe(
-          localeData.anotherNamespace.someKey
-        )
+        expect(t("title", null, "modal")).toBe(localeData.modal.title)
       })
 
       test(`t() returns a nested key from a non-default namespace`, () => {
-        expect(t("nestedKey.insideNestedKey", null, "anotherNamespace")).toBe(
-          localeData.anotherNamespace.nestedKey.insideNestedKey
+        expect(t("services.rental.title", null, "modal")).toBe(
+          localeData.modal.services.rental.title
         )
       })
 
       test(`t() returns an interpolated string with a single substitution variable`, () => {
         expect(
-          t("keyWithSingleStringInterpolation", {
-            variable1: "1"
+          t("status", {
+            currentStatus: "open"
           })
-        ).toBe("This is a value with variable 1.")
+        ).toBe("We are currently open")
       })
 
       test(`t() returns an interpolated string with a single substitution variable from with nested key`, () => {
         expect(
-          t("nestedKey.keyWithSingleStringInterpolationInsideNestedKey", {
-            variable1: "1"
+          t("testimonials.description", {
+            customerCount: "5"
           })
-        ).toBe("This is a nested key value with 1")
+        ).toBe("This is what our 5 customers are saying")
+      })
+
+      test(`t() returns an interpolated string with a single substitution variable from with nested key with number value`, () => {
+        expect(
+          t("testimonials.description", {
+            customerCount: 5
+          })
+        ).toBe("This is what our 5 customers are saying")
       })
 
       test(`t() returns an interpolated string with a single substitution variable with t() inside attribute object`, () => {
         expect(
-          t("keyWithSingleStringInterpolation", {
-            variable1: t("variable1")
+          t("status", {
+            currentStatus: t("open")
           })
-        ).toBe("This is a value with variable 4.")
+        ).toBe("We are currently open")
       })
 
       test(`t() returns an interpolated string with multiple defined variables`, () => {
         expect(
-          t("keyWithMultipleStringInterpolation", {
-            variable1: "1",
-            variable2: "2",
-            variable3: "3"
+          t("locations", {
+            locationsCount: "20",
+            citiesCount: "3",
+            helsinki: "Helsinki",
+            newYork: "New York",
+            new_delhi: "New Delhi"
           })
-        ).toBe("This is a value with variables 1, 2 and 3.")
-      })
-
-      test(`t() returns an interpolated string with multiple t() as attribute`, () => {
-        expect(
-          t("keyWithMultipleStringInterpolation", {
-            variable1: t("variable1"),
-            variable2: t("variable2"),
-            variable3: t("variable3")
-          })
-        ).toBe("This is a value with variables 4, 5 and 6.")
+        ).toBe(
+          "We have 20 locations in 3 cities: Helsinki, New York and New Delhi."
+        )
       })
 
       test(`t() returns an interpolated string with mixed substitution variables`, () => {
         expect(
-          t("keyWithMultipleStringInterpolation", {
-            variable1: "1",
-            variable2: t("variable2"),
-            variable3: "3"
+          t("locations", {
+            locationsCount: "20",
+            citiesCount: "3",
+            helsinki: t("helsinki", null, "locations"),
+            newYork: t("newYork", null, "locations"),
+            new_delhi: t("new_delhi", null, "locations")
           })
-        ).toBe("This is a value with variables 1, 5 and 3.")
+        ).toBe(
+          "We have 20 locations in 3 cities: Helsinki, New York and New Delhi."
+        )
       })
 
       test(`t() throws error on empty string`, () => {
@@ -127,86 +133,117 @@ const withCorrectData = (function () {
       })
 
       test(`t() throws error on incorrect string`, () => {
-        expect(() => t("wrongKeyWithSingleStringInterpolation")).toThrow(
-          "No string found! namespace.wrongKeyWithSingleStringInterpolation"
-        )
+        expect(() => t("_title")).toThrow("No string found! home._title")
       })
 
       test(`t() throws an error when variable count is different between passed attributes for t() and target value`, () => {
-        expect(() => t("keyWithMultipleStringInterpolation")).toThrow(
-          "Mismatch between string variables(3) and passed substitutions(0) for namespace.keyWithMultipleStringInterpolation"
+        expect(() => t("locations")).toThrow(
+          "Mismatch between string variables(5) and passed substitutions(0) for home.locations"
         )
       })
 
       test(`t() throws an error when substitution variable key name is wrong`, () => {
         expect(() =>
-          t("keyWithMultipleStringInterpolation", {
-            variable1WithWrongName: t("variable1"),
-            variable2: t("variable2"),
-            variable3: t("variable3")
+          t("locations", {
+            locationsCount: "20",
+            citiesCount: "3",
+            _helsinki: t("helsinki", null, "locations"),
+            newYork: t("newYork", null, "locations"),
+            new_delhi: t("new_delhi", null, "locations")
           })
         ).toThrow(
-          "Missing substitution variable from {{keyWithMultipleStringInterpolation}} in namespace.keyWithMultipleStringInterpolation"
+          "Missing substitution variable {{helsinki}} in home.locations"
         )
       })
     })
 
     describe("<Trans />", () => {
-      test("should return the correct locale value", () => {
+      test("should inject a <strong> tag inside the paragraph with t()", async () => {
         render(
           <Trans
-            i18nKey="keyWithSingleStringInterpolation"
-            variable1={<strong key={KEY_STRONG}>123</strong>}
+            i18nKey="status"
+            currentStatus={<strong key={KEY_SPAN}>{t("open")}</strong>}
           />
         )
-        screen.getByText("This is a value with variable", { exact: false })
+        screen.getByText("We are currently", {
+          exact: false
+        })
+        screen.getByText("open", { selector: "strong" })
       })
-      test("should return the correct locale value from another namespace", () => {
-        render(
-          <Trans
-            i18nKey="keyWithSingleStringInterpolation"
-            ns="anotherNamespace"
-            variable1={<strong key={KEY_STRONG}>123</strong>}
-          />
-        )
-        screen.getByText(
-          "This is a value from anotherNamespace with variable",
-          {
-            exact: false
-          }
-        )
-      })
-      test("should inject a <strong> tag inside the paragraph", async () => {
-        render(
-          <Trans
-            i18nKey="keyWithSingleStringInterpolation"
-            variable1={<strong key={KEY_STRONG}>123</strong>}
-          />
-        )
-        screen.getByText("123", { selector: "strong" })
-      })
-      test("should inject a <span> tag inside the paragraph with t()", async () => {
-        render(
-          <Trans
-            i18nKey="keyWithSingleStringInterpolation"
-            variable1={<span key={KEY_SPAN}>{t("variable1")}</span>}
-          />
-        )
-        screen.getByText("4", { selector: "span" })
-      })
+
       test("should inject <span>,<strong> and <b> tags inside the paragraph", async () => {
         render(
           <Trans
-            i18nKey="keyWithMultipleStringInterpolation"
-            variable1={<span key={KEY_SPAN}>1</span>}
-            variable2={<strong key={KEY_STRONG}>2</strong>}
-            variable3={<b key={KEY_B}>3</b>}
+            i18nKey="locations"
+            locationsCount={<span key={KEY_SPAN}>20</span>}
+            citiesCount={<strong key={KEY_STRONG}>3</strong>}
+            helsinki={<b key={KEY_HELSINKI}>Helsinki</b>}
+            newYork={<b key={KEY_NEW_YORK}>New York</b>}
+            new_delhi={<b key={KEY_NEW_DELHI}>New Delhi</b>}
           />
         )
-        screen.getByText("1", { selector: "span" })
-        screen.getByText("2", { selector: "strong" })
-        screen.getByText("3", { selector: "b" })
+        screen.getByText("We have ", {
+          exact: false
+        })
+        screen.getByText("20", { selector: "span" })
+        screen.getByText(" locations in ", {
+          exact: false
+        })
+        screen.getByText("3", { selector: "strong" })
+        screen.getByText(" cities: ", {
+          exact: false
+        })
+        screen.getByText(localeData.locations.helsinki, { selector: "b" })
+        screen.getByText(localeData.locations.newYork, { selector: "b" })
+        screen.getByText(localeData.locations.new_delhi, { selector: "b" })
       })
+
+      test("should inject <span>,<strong> and <b> tags inside the paragraph with resources", async () => {
+        render(
+          <Trans
+            i18nKey="locations"
+            locationsCount={<span key={KEY_SPAN}>20</span>}
+            citiesCount={<strong key={KEY_STRONG}>3</strong>}
+            helsinki={<b key={KEY_HELSINKI}>{resources.locations.helsinki}</b>}
+            newYork={<b key={KEY_NEW_YORK}>{resources.locations.newYork}</b>}
+            new_delhi={
+              <b key={KEY_NEW_DELHI}>{resources.locations.new_delhi}</b>
+            }
+          />
+        )
+        screen.getByText("We have ", {
+          exact: false
+        })
+        screen.getByText("20", { selector: "span" })
+        screen.getByText(" locations in ", {
+          exact: false
+        })
+        screen.getByText("3", { selector: "strong" })
+        screen.getByText(" cities: ", {
+          exact: false
+        })
+        screen.getByText(localeData.locations.helsinki, { selector: "b" })
+        screen.getByText(localeData.locations.newYork, { selector: "b" })
+        screen.getByText(localeData.locations.new_delhi, { selector: "b" })
+      })
+
+      test("should inject <strong> tags inside the paragraph with mixed variables from non-default namespace", async () => {
+        render(
+          <Trans
+            i18nKey="cars"
+            ns="modal"
+            carsCount={<strong key={KEY_CARS_COUNT}>3</strong>}
+            serviceType={
+              <strong key={KEY_SERVICE_TYPE}>
+                {resources.modal.services.rental.title}
+              </strong>
+            }
+          />
+        )
+        screen.getByText("3", { selector: "strong" })
+        screen.getByText("rental", { selector: "strong" })
+      })
+
       test("should throw an error with the wrong key", async () => {
         const originalError = console.error
         console.error = jest.fn() // Avoid throwing error in the console
@@ -214,13 +251,11 @@ const withCorrectData = (function () {
         expect(() => {
           render(
             <Trans
-              i18nKey="wrongKeyWithSingleStringInterpolation"
+              i18nKey="_title"
               variable1={<strong key={KEY_STRONG}>666</strong>}
             />
           )
-        }).toThrow(
-          "No string found! namespace.wrongKeyWithSingleStringInterpolation"
-        )
+        }).toThrow("No string found! home._title")
 
         console.error = originalError
       })

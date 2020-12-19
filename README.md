@@ -301,6 +301,8 @@ yalc link pikku-i18n
   - ~~Trans~~
 - Add support for infinite key nesting
 - Move createResources as an optional utility
+- t()
+  - accept numbers as parameter
 - Trans
   - string substitution prop name needs to have an exact match with string variables
   - automatically create unique keys inside Trans
