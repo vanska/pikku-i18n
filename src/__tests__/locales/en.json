@@ -4,7 +4,7 @@
     "status": "We are currently {{currentStatus}}",
     "open": "open",
     "closed": "closed",
-    "locations": "We have {{locationsCount}} locations in {{citiesCount}} cities: {{helsinki}}, {{newYork}} and {{new_delhi}}.",
+    "locations": "We have {{locationsCount}} locations in {{citiesCount}} cities: {{helsinki}}, {{washington}}, {{newYork}} and {{new_delhi}}.",
     "testimonials": {
       "title": "Testimonials",
       "description": "This is what our {{customerCount}} customers are saying",
@@ -33,6 +33,9 @@
   "locations": {
     "helsinki": "Helsinki",
     "newYork": "New York",
-    "new_delhi": "New Delhi"
+    "new_delhi": "New Delhi",
+    "washington": "Washington {{usState}}",
+    "ohio": "Ohio",
+    "north_carolina": "North Carolina"
   }
 }

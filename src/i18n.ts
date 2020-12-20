@@ -42,7 +42,12 @@ export const t = function (
   }
 
   let strSubs = val.match(SUBS_REG_EX)
-  if (!strSubs) return val
+  // Avoid using t() for simple strings
+  if (!strSubs) {
+    throw new Error(
+      `${ns}.${keyPath} doesn't contain any string variables! Use resources.${ns}.${keyPath} instead`
+    )
+  }
 
   let passedSubsCount = subs ? Object.keys(subs).length : 0
 

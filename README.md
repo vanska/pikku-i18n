@@ -4,6 +4,8 @@
 
 A tiny i18n ES6 library built especially for GatsbyJS and React without the need for suspense for SSR. Provides most commonly used i18n functionalities for static site rendering with Gatsby.
 
+`{{variable}}`
+
 Features:
 
 - Fetch strings from json data
@@ -41,52 +43,163 @@ plugins: [
 ]
 ```
 
-## Using with React
+## Using pikku-i18n
+
+Pikku-i18n can be used with both simple JavaScript and with React. The core library handles the string interpolations while the `Trans` component extends the library with React support.
+
+### Javascript
+
+```js
+import { init, t, lang, defaultNS, resources, Trans } from "pikku-i18n"
+import localeData from "./locales/en.json"
+
+// Call init() before calling any other method.
+// init() is only needed when using t() method or the Trans component.
+// You can optionally omit importing pikku-i18n entirely for components
+// without string variable interpolation for even smaller bundle size.
+init("en", "home", localeData)
+
+// Access to passed data
+console.log(lang) // "en"
+console.log(defaultNS) // "home"
+console.log(resources) // "access passed localeData within the library"
+
+// Optional: Assign a const for different namespaces.
+// Achieves less repetition for same namespace/object
+const r = resources[defaultNS]
+const rCustomers = resources[defaultNS].testimonials.customers
+const rModal = resources.modal
+
+// Accessing locale string through
+// the resources object has the best performance
+console.log(r.title) // returns "home.title"
+// Access to nested values
+console.log(r.testimonials.title) // returns "home.testimonials.title"
+// Access a non-default namespace
+console.log(rModal.title) // returns "modal.title"
+
+// Use t() only for strings with variables
+console.log(
+  t("status", { currentStatus: r.open }) // "We are currently open"
+)
+// Interpolate a string from a non-default namespace
+console.log(
+  t("cars", { carsCount: 5, serviceType: rModal.services.lease.title }, "modal") // "We currently have 5 cars available for lease"
+)
+// Strings can contain multiple variables
+console.log(
+  t(
+    "locations", // returns interpolated "home.locations"
+    // Pass an object containing each string variable
+    {
+      locationsCount: 20, // Both numbers and
+      citiesCount: "4", // strings can be used for interpolation.
+      helsinki: resources.locations.newYork, // "locations.helsinki"
+      // Variables can be nested
+      washington: t("washington", { usState: resources.locations.ohio }), // Washington Ohio
+      newYork: resources.locations.newYork, // Both camelCase and
+      new_delhi: resources.locations.new_delhi // snake_case are supported
+    }
+  )
+)
+```
+
+### With React
+
+The `Trans` component is used for wrapping the string variables inside a React node.
 
 ```js
 import React from "react"
-import i18n, { Trans } from "vanska/pikku-i18n"
+import { init, t, resources, Trans } from "vanska/pikku-i18n"
+import localeData from "./locales/en.json"
 
-export default function SomePage() {
-  i18n.init("en", "namespace", localeData)
-  const { t } = i18n
+export default function Component() {
+  init("en", "home", localeData)
 
   return (
     <>
-      <h1>{t("someKey")}</h1>
-      <p>{t("keyWithStringInterpolation", { variable: 3 })}</p>
-      <p>{t("keyWithStringInterpolation", { variable: t("variable") })}</p>
+      // Use the core library the same way as with simple JavaScript
+      <h1>{t("title")}</h1>
       <p>
         <Trans
-          i18nKey="keyWithStringInterpolation"
-          variable={<strong key={"variableStrongId"}>666</strong>}
-        />
-        <Trans
-          i18nKey="keyWithStringInterpolation"
-          variable={<span key={"variableSpanId"}>{t("variable")}</span>}
+          i18nKey="locations"
+          locationsCount={<strong key="locations">20</strong>}
+          citiesCount={<strong key="cities">{4}</strong>}
+          helsinki={resources.locations.helsinki}
+          washington={t(
+            "washington",
+            { usState: resources.locations.ohio },
+            "locations"
+          )}
+          newYork={resources.locations.newYork}
+          new_delhi={resources.locations.new_delhi}
         />
       </p>
-      <p>{t("anotherNamespace:someKey")}</p>
     </>
   )
 }
 ```
 
+Trans component will wrap the string variables in React nodes
+
+```jsx
+<Trans
+  i18nKey="keyWithStringInterpolation"
+  variable={<span key={"variableSpanId"}>{t("variable")}</span>}
+/>
+```
+
+### Tips
+
+1. Rename imports if you have namespace collision with other libraries.
+
+```js
+import { init as i18nInit, resources as r } from "vanska/pikku-i18n"
+```
+
 ## i18n JSON format
 
-It's important all values are strings.
+Note: All values need to be strings.
+
+Example locale JSON `en.json`
 
 ```json
-// en.json
 {
-  "namespace": {
-    "someKey": "This is some value",
-    "keyWithStringInterpolation": "This is a value with a variable of {{variable}}",
-    "variable": "3"
+  "home": {
+    "title": "This is our awesome home page title",
+    "status": "We are currently {{currentStatus}}",
+    "open": "open",
+    "closed": "closed",
+    "locations": "We have {{locationsCount}} locations in {{citiesCount}} cities: {{helsinki}}, {{newYork}} and {{new_delhi}}.",
+    "testimonials": {
+      "title": "Testimonials",
+      "description": "This is what our {{customerCount}} customers are saying",
+      "customers": {
+        "john": {
+          "quote": "This is an awesome company!"
+        },
+        "mary": {
+          "quote": "A great experience!"
+        }
+      }
+    }
   },
-  "anotherNamespace": {
-    "someKey": "This is some key",
-    "keyWithStringInterpolation": "This is a value with a variable of {{variable}}"
+  "modal": {
+    "title": "How may we help?",
+    "cars": "We currently have {{carsCount}} cars available for {{serviceType}}",
+    "services": {
+      "rental": {
+        "title": "rental"
+      },
+      "lease": {
+        "title": "lease"
+      }
+    }
+  },
+  "locations": {
+    "helsinki": "Helsinki",
+    "newYork": "New York", // Both camelCase and
+    "new_delhi": "New Delhi" // snake_case keys are supported
   }
 }
 ```
