@@ -1,7 +1,7 @@
 export let lang = ""
 export let defaultNS = ""
 export let resources: any = {}
-export const SUBS_REG_EX = new RegExp(/\{{([^{]+)}}/g)
+export const VAR_REG_EX = new RegExp(/\{{([^{]+)}}/g)
 
 export const init = function (l: string, dns: string, data: {}): void {
   lang = l
@@ -9,19 +9,9 @@ export const init = function (l: string, dns: string, data: {}): void {
   resources = data
 }
 
-export const t = function (
-  str: string,
-  subs?: {} | null,
-  // nsO?: string | null,
-  trans?: boolean
-) {
+export const t = function (str: string, subs?: {} | null, trans?: boolean) {
   let strSplit: string[], keyPath: string[], ns: string, val: string
   if (str.length > 0) {
-    // Check for empty namespace override
-    // if (nsO && nsO.length === 0) {
-    //   throw new Error(`Namespace override doesn't exist for ${str}`)
-    // }
-    // Set namespace override if it exists
     strSplit = str.split(":")
     ns = strSplit.length > 1 ? strSplit[0] : defaultNS
     keyPath =
@@ -38,12 +28,13 @@ export const t = function (
   if (!val) {
     throw new Error(`No string found! ${ns}.${keyPath}`)
   }
-  // Skip interpolation for Trans component
-  if (trans) {
+
+  let strSubs = val.match(VAR_REG_EX)
+
+  // Skip interpolation if string doesn't contain variables
+  if (!strSubs) {
     return val
   }
-
-  let strSubs = val.match(SUBS_REG_EX)
 
   let passedSubsCount = subs ? Object.keys(subs).length : 0
 
@@ -55,12 +46,16 @@ export const t = function (
     }
   }
 
-  return val.replace(SUBS_REG_EX, function (_, subsKey: string) {
+  return val.replace(VAR_REG_EX, function (match, subsKey: string) {
     if (subs) {
       if (!subs[subsKey]) {
         throw new Error(
-          `Missing substitution variable {{${subsKey}}} in ${ns}.${keyPath}`
+          `Missing or wrong substitution variable {{${subsKey}}} in ${ns}.${keyPath}`
         )
+      }
+      // Return string as is for Trans component after check
+      if (trans) {
+        return match
       }
       return subs[subsKey] && subs[subsKey]
     }

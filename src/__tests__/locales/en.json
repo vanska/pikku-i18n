@@ -2,6 +2,7 @@
   "home": {
     "title": "This is our awesome home page title",
     "status": "We are currently {{currentStatus}}",
+    "chosenLocation": "{{chosenLocation}} chosen as home location",
     "open": "open",
     "closed": "closed",
     "locations": "We have {{locationsCount}} locations in {{citiesCount}} cities: {{helsinki}}, {{washington}}, {{newYork}} and {{new_delhi}}.",
@@ -35,7 +36,9 @@
     "newYork": "New York",
     "new_delhi": "New Delhi",
     "washington": "Washington {{usState}}",
-    "ohio": "Ohio",
-    "north_carolina": "North Carolina"
+    "usStates": {
+      "ohio": "Ohio",
+      "north_carolina": "North Carolina"
+    }
   }
 }

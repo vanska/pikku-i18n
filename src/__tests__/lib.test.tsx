@@ -66,6 +66,14 @@ const withCorrectData = (function () {
         ).toBe("We are currently open")
       })
 
+      test(`t() returns an interpolated string with variable as first item`, () => {
+        expect(
+          t("chosenLocation", {
+            chosenLocation: t("locations:helsinki")
+          })
+        ).toBe("Helsinki chosen as home location")
+      })
+
       test(`t() returns an interpolated string with a single substitution variable from with nested key`, () => {
         expect(
           t("testimonials.description", {
@@ -95,14 +103,12 @@ const withCorrectData = (function () {
           t("locations", {
             locationsCount: 20,
             citiesCount: "4",
-            helsinki: resources.locations.helsinki,
-            washington: t(
-              "washington",
-              { usState: resources.locations.ohio },
-              "locations"
-            ),
-            newYork: resources.locations.newYork,
-            new_delhi: resources.locations.new_delhi
+            helsinki: t("locations:helsinki"),
+            washington: t("locations:washington", {
+              usState: t("locations:usStates.ohio")
+            }),
+            newYork: t("locations:newYork"),
+            new_delhi: t("locations:new_delhi")
           })
         ).toBe(
           "We have 20 locations in 4 cities: Helsinki, Washington Ohio, New York and New Delhi."
@@ -111,12 +117,6 @@ const withCorrectData = (function () {
 
       test(`t() throws an error when no substitution variables are provided`, () => {
         expect(() => t("")).toThrow("Key string is empty.")
-      })
-
-      test(`t() throws error on empty string`, () => {
-        expect(() => t("title")).toThrow(
-          "home.title doesn't contain any string variables! Use resources.home.title instead"
-        )
       })
 
       test(`t() throws error on incorrect string`, () => {
@@ -134,97 +134,161 @@ const withCorrectData = (function () {
           t("locations", {
             locationsCount: 20,
             citiesCount: "4",
-            _helsinki: resources.locations.helsinki,
-            washington: t(
-              "washington",
-              { usState: resources.locations.ohio },
-              "locations"
-            ),
-            newYork: resources.locations.newYork,
-            new_delhi: resources.locations.new_delhi
+            _helsinki: t("locations:helsinki"),
+            washington: t("locations:washington", {
+              usState: t("locations:usStates.ohio")
+            }),
+            newYork: t("locations:newYork"),
+            new_delhi: t("locations:new_delhi")
           })
         ).toThrow(
-          "Missing substitution variable {{helsinki}} in home.locations"
+          "Missing or wrong substitution variable {{helsinki}} in home.locations"
         )
       })
     })
 
     describe("<Trans />", () => {
-      // test("interpolates different strings", async () => {
-      //   render(
-      //     <Trans
-      //       i18nKey="locations"
-      //       locationsCount={<strong key="locations">20</strong>}
-      //       citiesCount={<strong key="cities">{4}</strong>}
-      //       helsinki={resources.locations.helsinki}
-      //       washington={t(
-      //         "washington",
-      //         { usState: resources.locations.ohio },
-      //         "locations"
-      //       )}
-      //       newYork={resources.locations.newYork}
-      //       new_delhi={resources.locations.new_delhi}
-      //     />
-      //   )
-      //   screen.getByText("We have ", {
-      //     exact: false
-      //   })
-      //   screen.getByText("20", { selector: "strong" })
-      //   screen.getByText(" locations in ", {
-      //     exact: false
-      //   })
-      //   screen.getByText("4", { selector: "strong" })
-      //   screen.getByText(
-      //     " cities: Helsinki, Washington Ohio, New York and New Delhi.",
-      //     {
-      //       exact: false
-      //     }
-      //   )
-      // })
-      // test("should throw an error with the wrong key", async () => {
-      //   const originalError = console.error
-      //   console.error = jest.fn() // Avoid throwing error in the console
-      //   expect(() => {
-      //     render(
-      //       <Trans
-      //         i18nKey="_locations"
-      //         locationsCount={<strong key="locations">20</strong>}
-      //         citiesCount={<strong key="cities">{4}</strong>}
-      //         helsinki={resources.locations.helsinki}
-      //         washington={t(
-      //           "washington",
-      //           { usState: resources.locations.ohio },
-      //           "locations"
-      //         )}
-      //         newYork={resources.locations.newYork}
-      //         new_delhi={resources.locations.new_delhi}
-      //       />
-      //     )
-      //   }).toThrow("No string found! home._locations")
-      //   console.error = originalError
-      // })
-      // test("should throw an error with a wrong variable key", async () => {
-      //   const originalError = console.error
-      //   console.error = jest.fn() // Avoid throwing error in the console
-      //   expect(() => {
-      //     render(
-      //       <Trans
-      //         i18nKey="locations"
-      //         locationsCount={<strong key="locations">20</strong>}
-      //         citiesCount={<strong key="cities">{4}</strong>}
-      //         _helsinki={resources.locations.helsinki}
-      //         washington={t(
-      //           "washington",
-      //           { usState: resources.locations.ohio },
-      //           "locations"
-      //         )}
-      //         newYork={resources.locations.newYork}
-      //         new_delhi={resources.locations.new_delhi}
-      //       />
-      //     )
-      //   }).toThrow("")
-      //   console.error = originalError
-      // })
+      test("interpolates different strings", async () => {
+        render(
+          <Trans
+            i18nKey="locations"
+            subs={{
+              locationsCount: <strong key="locations">20</strong>,
+              citiesCount: <strong key="cities">{4}</strong>,
+              helsinki: t("locations:helsinki"),
+              washington: t("locations:washington", {
+                usState: t("locations:usStates.ohio")
+              }),
+              newYork: t("locations:newYork"),
+              new_delhi: t("locations:new_delhi")
+            }}
+          />
+        )
+        screen.getByText("We have ", {
+          exact: false
+        })
+        screen.getByText("20", { selector: "strong" })
+        screen.getByText(" locations in ", {
+          exact: false
+        })
+        screen.getByText("4", { selector: "strong" })
+        screen.getByText(
+          " cities: Helsinki, Washington Ohio, New York and New Delhi.",
+          {
+            exact: false
+          }
+        )
+      })
+
+      test("Trans returns interpolated string with variable as first item", async () => {
+        render(
+          <Trans
+            i18nKey="chosenLocation"
+            subs={{
+              chosenLocation: (
+                <strong key="chosenLocation">{t("locations:helsinki")}</strong>
+              )
+            }}
+          />
+        )
+
+        screen.getByText("Helsinki", { selector: "strong" })
+        screen.getByText("chosen as home location", {
+          exact: false
+        })
+      })
+
+      test("Trans returns interpolation from non-default namespace", async () => {
+        render(
+          <Trans
+            i18nKey="modal:cars"
+            subs={{
+              carsCount: <strong key="carsCount">20</strong>,
+              serviceType: t("modal:services.lease.title")
+            }}
+          />
+        )
+        screen.getByText("We currently have ", {
+          exact: false
+        })
+        screen.getByText("20", { selector: "strong" })
+        screen.getByText(" cars available for ", {
+          exact: false
+        })
+        screen.getByText("lease", {
+          exact: false
+        })
+      })
+
+      test("Trans should throw an error with missing key", async () => {
+        const originalError = console.error
+        console.error = jest.fn() // Avoid throwing error in the console
+        expect(() => {
+          render(
+            <Trans
+              i18nKey="_locations"
+              subs={{
+                locationsCount: <strong key="locations">20</strong>,
+                citiesCount: <strong key="cities">{4}</strong>,
+                helsinki: t("locations:helsinki"),
+                washington: t("locations:washington", {
+                  usState: t("locations:usStates.ohio")
+                }),
+                newYork: t("locations:newYork"),
+                new_delhi: t("locations:new_delhi")
+              }}
+            />
+          )
+        }).toThrow("No string found! home._locations")
+        console.error = originalError
+      })
+
+      test("Trans should throw an error with a wrong variable key", async () => {
+        const originalError = console.error
+        console.error = jest.fn() // Avoid throwing error in the console
+        expect(() => {
+          render(
+            <Trans
+              i18nKey="chosenLocation"
+              subs={{
+                _chosenLocation: (
+                  <strong key="chosenLocation">
+                    {t("locations:helsinki")}
+                  </strong>
+                )
+              }}
+            />
+          )
+        }).toThrow(
+          "Missing or wrong substitution variable {{chosenLocation}} in home.chosenLocation"
+        )
+        console.error = originalError
+      })
+
+      test("Trans should throw an error with missing variable key", async () => {
+        const originalError = console.error
+        console.error = jest.fn() // Avoid throwing error in the console
+        expect(() => {
+          render(
+            <Trans
+              i18nKey="locations"
+              subs={{
+                locationsCount: <strong key="locations">20</strong>,
+                citiesCount: <strong key="cities">{4}</strong>,
+                // helsinki: t("locations:helsinki"),
+                washington: t("locations:washington", {
+                  usState: t("locations:usStates.ohio")
+                }),
+                newYork: t("locations:newYork"),
+                new_delhi: t("locations:new_delhi")
+              }}
+            />
+          )
+        }).toThrow(
+          "Mismatch between string variables(6) and passed substitutions(5) for home.locations"
+        )
+        console.error = originalError
+      })
     })
   })
 })()

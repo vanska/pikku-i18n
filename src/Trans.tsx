@@ -1,22 +1,25 @@
 import React from "react"
-import { t, SUBS_REG_EX } from "./i18n"
+import { t, VAR_REG_EX } from "./i18n"
 
 export const Trans = ({
   i18nKey,
   ns,
-  ...rest
+  subs
 }: {
   i18nKey: string
   ns?: string
-  [key: string]: any
+  subs: {
+    [key: string]: JSX.Element | string
+  }
 }) => (
   <>
-    {t(i18nKey, null, true)
-      .split(SUBS_REG_EX)
+    {t(i18nKey, subs, true) // Return the correct string with variables
+      .split(VAR_REG_EX) // Split variables
       .reduce((prev: string[], current, i) => {
+        // Return an empty array for concat.
         if (!i) return [current]
-        return prev.concat(
-          Object.keys(rest).includes(current) ? rest[current] : current
+        return (prev as any).concat(
+          Object.keys(subs).includes(current) ? subs[current] : current
         )
       }, [])}
   </>
