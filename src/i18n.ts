@@ -12,18 +12,20 @@ export const init = function (l: string, dns: string, data: {}): void {
 export const t = function (
   str: string,
   subs?: {} | null,
-  nsO?: string | null,
+  // nsO?: string | null,
   trans?: boolean
 ) {
-  let keyPath: string[], ns: string, val: string
+  let strSplit: string[], keyPath: string[], ns: string, val: string
   if (str.length > 0) {
     // Check for empty namespace override
-    if (nsO && nsO.length === 0) {
-      throw new Error(`Namespace override doesn't exist for ${str}`)
-    }
+    // if (nsO && nsO.length === 0) {
+    //   throw new Error(`Namespace override doesn't exist for ${str}`)
+    // }
     // Set namespace override if it exists
-    ns = nsO ? nsO : defaultNS
-    keyPath = str.split(".")
+    strSplit = str.split(":")
+    ns = strSplit.length > 1 ? strSplit[0] : defaultNS
+    keyPath =
+      strSplit.length > 1 ? strSplit[1].split(".") : strSplit[0].split(".")
     val = keyPath.reduce((p, c) => p?.[c], resources[ns])
   } else {
     throw new Error(`Key string is empty.`)
@@ -42,19 +44,15 @@ export const t = function (
   }
 
   let strSubs = val.match(SUBS_REG_EX)
-  // Avoid using t() for simple strings
-  if (!strSubs) {
-    throw new Error(
-      `${ns}.${keyPath} doesn't contain any string variables! Use resources.${ns}.${keyPath} instead`
-    )
-  }
 
   let passedSubsCount = subs ? Object.keys(subs).length : 0
 
-  if (passedSubsCount !== strSubs.length) {
-    throw new Error(
-      `Mismatch between string variables(${strSubs.length}) and passed substitutions(${passedSubsCount}) for ${ns}.${keyPath}`
-    )
+  if (strSubs) {
+    if (passedSubsCount !== strSubs.length) {
+      throw new Error(
+        `Mismatch between string variables(${strSubs.length}) and passed substitutions(${passedSubsCount}) for ${ns}.${keyPath}`
+      )
+    }
   }
 
   return val.replace(SUBS_REG_EX, function (_, subsKey: string) {

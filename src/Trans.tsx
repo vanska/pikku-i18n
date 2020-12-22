@@ -11,7 +11,7 @@ export const Trans = ({
   [key: string]: any
 }) => (
   <>
-    {t(i18nKey, null, ns, true)
+    {t(i18nKey, null, true)
       .split(SUBS_REG_EX)
       .reduce((prev: string[], current, i) => {
         if (!i) return [current]

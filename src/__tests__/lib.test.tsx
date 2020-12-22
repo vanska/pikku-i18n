@@ -54,6 +54,10 @@ const withCorrectData = (function () {
     })
 
     describe("{ t }", () => {
+      test(`t() returns a string from non-default namespace`, () => {
+        expect(t("modal:title")).toBe("How may we help?")
+      })
+
       test(`t() returns an interpolated string with a single substitution variable`, () => {
         expect(
           t("status", {
@@ -146,61 +150,59 @@ const withCorrectData = (function () {
     })
 
     describe("<Trans />", () => {
-      test("interpolates different strings", async () => {
-        render(
-          <Trans
-            i18nKey="locations"
-            locationsCount={<strong key="locations">20</strong>}
-            citiesCount={<strong key="cities">{4}</strong>}
-            helsinki={resources.locations.helsinki}
-            washington={t(
-              "washington",
-              { usState: resources.locations.ohio },
-              "locations"
-            )}
-            newYork={resources.locations.newYork}
-            new_delhi={resources.locations.new_delhi}
-          />
-        )
-        screen.getByText("We have ", {
-          exact: false
-        })
-        screen.getByText("20", { selector: "strong" })
-        screen.getByText(" locations in ", {
-          exact: false
-        })
-        screen.getByText("4", { selector: "strong" })
-        screen.getByText(
-          " cities: Helsinki, Washington Ohio, New York and New Delhi.",
-          {
-            exact: false
-          }
-        )
-      })
-
-      test("should throw an error with the wrong key", async () => {
-        const originalError = console.error
-        console.error = jest.fn() // Avoid throwing error in the console
-        expect(() => {
-          render(
-            <Trans
-              i18nKey="_locations"
-              locationsCount={<strong key="locations">20</strong>}
-              citiesCount={<strong key="cities">{4}</strong>}
-              helsinki={resources.locations.helsinki}
-              washington={t(
-                "washington",
-                { usState: resources.locations.ohio },
-                "locations"
-              )}
-              newYork={resources.locations.newYork}
-              new_delhi={resources.locations.new_delhi}
-            />
-          )
-        }).toThrow("No string found! home._locations")
-        console.error = originalError
-      })
-
+      // test("interpolates different strings", async () => {
+      //   render(
+      //     <Trans
+      //       i18nKey="locations"
+      //       locationsCount={<strong key="locations">20</strong>}
+      //       citiesCount={<strong key="cities">{4}</strong>}
+      //       helsinki={resources.locations.helsinki}
+      //       washington={t(
+      //         "washington",
+      //         { usState: resources.locations.ohio },
+      //         "locations"
+      //       )}
+      //       newYork={resources.locations.newYork}
+      //       new_delhi={resources.locations.new_delhi}
+      //     />
+      //   )
+      //   screen.getByText("We have ", {
+      //     exact: false
+      //   })
+      //   screen.getByText("20", { selector: "strong" })
+      //   screen.getByText(" locations in ", {
+      //     exact: false
+      //   })
+      //   screen.getByText("4", { selector: "strong" })
+      //   screen.getByText(
+      //     " cities: Helsinki, Washington Ohio, New York and New Delhi.",
+      //     {
+      //       exact: false
+      //     }
+      //   )
+      // })
+      // test("should throw an error with the wrong key", async () => {
+      //   const originalError = console.error
+      //   console.error = jest.fn() // Avoid throwing error in the console
+      //   expect(() => {
+      //     render(
+      //       <Trans
+      //         i18nKey="_locations"
+      //         locationsCount={<strong key="locations">20</strong>}
+      //         citiesCount={<strong key="cities">{4}</strong>}
+      //         helsinki={resources.locations.helsinki}
+      //         washington={t(
+      //           "washington",
+      //           { usState: resources.locations.ohio },
+      //           "locations"
+      //         )}
+      //         newYork={resources.locations.newYork}
+      //         new_delhi={resources.locations.new_delhi}
+      //       />
+      //     )
+      //   }).toThrow("No string found! home._locations")
+      //   console.error = originalError
+      // })
       // test("should throw an error with a wrong variable key", async () => {
       //   const originalError = console.error
       //   console.error = jest.fn() // Avoid throwing error in the console

@@ -18,6 +18,12 @@ Utility extras:
 
 - A NodeJS utility for testing i18n locale character count for words and paragraphs
 
+## Benefits
+
+Why not just access the resources object directly:
+
+-
+
 ## Install
 
 ```bash
