@@ -6,14 +6,6 @@ import localeData from "./locales/en.json"
 import { render } from "@testing-library/react"
 import { screen } from "@testing-library/dom"
 
-const KEY_STRONG = "key_strong",
-  KEY_SPAN = "key_span",
-  KEY_HELSINKI = "Helsinki",
-  KEY_NEW_YORK = "New York",
-  KEY_NEW_DELHI = "New Delhi",
-  KEY_CARS_COUNT = "carsCountKey",
-  KEY_SERVICE_TYPE = "serviceTypeKey"
-
 const withCorrectData = (function () {
   const testLang = "en"
   const testDefaultNs = "home"
@@ -40,6 +32,10 @@ const withCorrectData = (function () {
         expect(resources[testDefaultNs].title).toBe(
           localeData[testDefaultNs].title
         )
+      })
+
+      test(`wrong resources strings should return undefined`, () => {
+        expect(resources[testDefaultNs]._title).toBe(undefined)
       })
 
       test(`resources strings should resturn deeply nested values`, () => {
@@ -142,7 +138,7 @@ const withCorrectData = (function () {
             new_delhi: t("locations:new_delhi")
           })
         ).toThrow(
-          "Missing or wrong substitution variable {{helsinki}} in home.locations"
+          "Can't find variable key {{helsinki}} for home.locations from passed values"
         )
       })
     })
@@ -260,7 +256,7 @@ const withCorrectData = (function () {
             />
           )
         }).toThrow(
-          "Missing or wrong substitution variable {{chosenLocation}} in home.chosenLocation"
+          "Can't find variable key {{chosenLocation}} for home.chosenLocation from passed values"
         )
         console.error = originalError
       })

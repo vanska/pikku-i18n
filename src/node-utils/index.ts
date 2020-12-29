@@ -1,3 +1,3 @@
-const checkLocaleStringLengths = require("./checkLocaleStringLengths")
+import checkLocaleStringLengths from "./checkLocaleStringLengths"
 
-module.exports = { checkLocaleStringLengths }
+export = { checkLocaleStringLengths }

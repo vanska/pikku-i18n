@@ -2,32 +2,20 @@
 
 > "Pikku" means tiny in the Finnish language.
 
-A tiny i18n ES6 library built especially for GatsbyJS and React without the need for suspense for SSR. Provides most commonly used i18n functionalities for static site rendering with Gatsby.
+A tiny ES6 library for i18n string interpolation with supporting React component. Great for GatsbyJS as it doesn't require React suspense for server side rendering (SSR).
 
-`{{variable}}`
+Provides most commonly used i18n functionalities:
 
-Features:
-
-- Fetch strings from json data
-- String interpolation with data or a React component
-- Assign language
-- Assign default namespace
-- Fetch any string from any namespace within the locale data
-
-Utility extras:
-
-- A NodeJS utility for testing i18n locale character count for words and paragraphs
-
-## Benefits
-
-Why not just access the resources object directly:
-
--
+- String interpolation with variables
+- Injecting React components inside string variables
+- Helpful error messages for incorrect strings, missing variables etc.
+- Node utility for validating string lengths
+  - Set a max paragraph and word max length for defined keys
 
 ## Install
 
 ```bash
-npm install --save vanska/pikku-i18n gatsby-plugin-compile-es6-packages
+npm install --save pikku-i18n gatsby-plugin-compile-es6-packages
 ```
 
 ## Usage with GatsbyJS
@@ -70,21 +58,14 @@ console.log(lang) // "en"
 console.log(defaultNS) // "home"
 console.log(resources) // "access passed localeData within the library"
 
-// Optional: Assign a const for different namespaces.
-// Achieves less repetition for same namespace/object
-const r = resources[defaultNS]
-const rCustomers = resources[defaultNS].testimonials.customers
-const rModal = resources.modal
-
-// Accessing locale string through
-// the resources object has the best performance
-console.log(r.title) // returns "home.title"
-// Access to nested values
-console.log(r.testimonials.title) // returns "home.testimonials.title"
-// Access a non-default namespace
-console.log(rModal.title) // returns "modal.title"
-
-// Use t() only for strings with variables
+console.log(
+  t("title") // returns "home.title" from locales
+)
+// Access alternative namespace strings
+console.log(
+  t("modal:title") // returns "modal.title" from locales
+)
+// strings with variables
 console.log(
   t("status", { currentStatus: r.open }) // "We are currently open"
 )
