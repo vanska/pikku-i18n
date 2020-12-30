@@ -1,6 +1,6 @@
 export let lang = ""
 export let defaultNS = ""
-export let resources: Record<any, any> = {}
+export let resources: Record<string, any> = {}
 export const VAR_REG_EX = new RegExp(/\{{([^{]+)}}/g)
 
 export const init = function (

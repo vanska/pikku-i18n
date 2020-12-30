@@ -370,7 +370,18 @@ Character count of 61 for "Lentokonesuihkuturbiinimoottoriapumekaanikkoaliupseer
 Paragraph length of 80 is greater than set maximum of 60
 ```
 
-## Local package development with yalc
+## Package development with yalc
+
+### TypeScript, Jest, Prettier and Eslint
+
+```bash
+# Prettier
+npm run format
+# Jest
+npm run jest-watch
+```
+
+### Local end to end package testing with yalc
 
 ```bash
 npm run yalc-watch
