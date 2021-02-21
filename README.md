@@ -290,6 +290,17 @@ Reasoning:
 - No need to set `overflow-x: hidden` CSS property
 - Integrate as a part of e.g. build process and commit checks
 
+### TypeScript, Jest, Prettier and Eslint
+
+```bash
+# TypeScript
+npm run tsc-watch
+# Prettier
+npm run format
+# Jest
+npm run jest-watch
+```
+
 ### Local end to end package testing with yalc
 
 ```bash
