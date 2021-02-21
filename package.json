@@ -1,6 +1,6 @@
 {
   "name": "pikku-i18n",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Tiny i18n library for ES6 and React",
   "author": "Mikko Vänskä <mikkovanska.com@gmail.com>",
   "keywords": [
