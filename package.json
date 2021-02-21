@@ -49,14 +49,14 @@
     "build": "tsc",
     "tsc-watch": "tsc --watch --noEmit --project './tsconfig.json'",
     "prepare": "npm run build",
-    "prepublishOnly": "npm test && npm run lint",
+    "prepublishOnly": "echo 'Skipping npm test && npm run lint'",
     "preversion": "npm run lint",
     "version": "npm run format && git add -A src",
     "postversion": "git push && git push --tags"
   },
   "yalcWatch": {
-    "watchFolder": "lib",
-    "buildWatchCommand": "echo 'Watching for file changes in lib folder'",
+    "watchFolder": "src",
+    "buildWatchCommand": "echo 'Watching for file changes in src'",
     "extensions": "js"
   },
   "dependencies": {
