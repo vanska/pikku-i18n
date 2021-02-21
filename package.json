@@ -47,7 +47,7 @@
     "test": "jest",
     "jest-watch": "npm run test -- --watch",
     "build": "tsc",
-    "watch": "tsc --watch --noEmit --project './tsconfig.json'"
+    "tsc-watch": "tsc --watch --noEmit --project './tsconfig.json'"
   },
   "yalcWatch": {
     "watchFolder": "lib",
@@ -55,6 +55,7 @@
     "extensions": "js"
   },
   "dependencies": {
+    "glob": "^7.1.6",
     "log-beautify": "^1.2.0"
   }
 }

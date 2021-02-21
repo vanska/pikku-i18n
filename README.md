@@ -15,31 +15,12 @@ Provides most commonly used i18n functionalities:
 ## Install
 
 ```bash
-npm install --save pikku-i18n gatsby-plugin-compile-es6-packages
-```
-
-## Usage with GatsbyJS
-
-Since this is an ES6 package it needs to be transpiled by Gatsby during build.
-
-1. Install this plugin for Gatsby: [gatsby-plugin-compile-es6-packages](https://github.com/robwalkerco/gatsby-plugin-compile-es6-packages)
-1. Add the plugin to your `gatsby-config.js`.
-
-```js
-plugins: [
-  `gatsby-plugin-transform-i18n-locales`
-  {
-    resolve: `gatsby-plugin-compile-es6-packages`,
-    options: {
-      modules: [`pikku-i18n`]
-    }
-  }
-]
+npm install pikku-i18n
 ```
 
 ## Using pikku-i18n
 
-Pikku-i18n can be used with both simple JavaScript and with React. The core library handles the string interpolations while the `Trans` component extends the library with React support.
+Pikku-i18n can be used with both vanilla JavaScript and with React. The core library handles the string interpolations while the `Trans` component extends the library with React support.
 
 ### Javascript
 
@@ -71,7 +52,7 @@ console.log(
 )
 // Interpolate a string from a non-default namespace
 console.log(
-  t("cars", { carsCount: 5, serviceType: rModal.services.lease.title }, "modal") // "We currently have 5 cars available for lease"
+  t("cars", { carsCount: 5, serviceType: modal.services.lease.title }, "modal") // "We currently have 5 cars available for lease"
 )
 // Strings can contain multiple variables
 console.log(
@@ -308,78 +289,6 @@ Reasoning:
 - The `hyphens` CSS property works poorly with any other language than English, cutting words at undesired locations
 - No need to set `overflow-x: hidden` CSS property
 - Integrate as a part of e.g. build process and commit checks
-
-### Node utils
-
-```js
-checkLocaleStringLengths("path/to/locales", rulesArray)
-```
-
-### Usage
-
-```js
-// translations/test/index.js
-
-const { checkLocaleStringLengths } = require("pikku-i18n/lib/node-utils")
-
-checkLocaleStringLengths("translations/locales", [
-  {
-    level: "error", // Will throw an error that stops the Node process
-    type: "word", // Checks for total characters in single words
-    key: "title", // Key to be tested
-    maxCharacters: 20 // Max characters allowed.
-  },
-  {
-    level: "warning", // Only prints a warning to the console but doesn't halt the process
-    type: "paragraph", // Checks for total characters in a paragraph
-    key: "metaTitle",
-    maxCharacters: 60 // Sensible default for meta titles
-  },
-  {
-    level: "warning",
-    type: "paragraph",
-    key: "metaDescription",
-    maxCharacters: 300 // Sensible default for meta descriptions
-  }
-])
-```
-
-```js
-// package.json
-{
-  "scripts": {
-    "test-translations": "node ./translations/test/index.js"
-  }
-}
-```
-
-```terminal
-npm run test-translations
-```
-
-Example terminal output:
-
-```terminal
-✖ Error:
-=> fi.home.title
-String contains a word with too many characters!
-Character count of 61 for "Lentokonesuihkuturbiinimoottoriapumekaanikkoaliupseerioppilas" is more than the maximum character count of 20
-
-⚠ Warning:
-=> en.home.metaTitle
-Paragraph length of 80 is greater than set maximum of 60
-```
-
-## Package development with yalc
-
-### TypeScript, Jest, Prettier and Eslint
-
-```bash
-# Prettier
-npm run format
-# Jest
-npm run jest-watch
-```
 
 ### Local end to end package testing with yalc
 
