@@ -5,19 +5,19 @@
   "author": "Mikko Vänskä <mikkovanska.com@gmail.com>",
   "keywords": [
     "i18n",
+    "l10n",
     "react",
-    "gatsby"
+    "string interpolation"
   ],
+  "main": "./lib/index.js",
   "files": [
     "lib/**/*"
   ],
   "types": "lib/index.d.ts",
-  "typings": "lib/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/vanska/pikku-i18n.git"
   },
-  "main": "./lib/index.js",
   "license": "MIT",
   "devDependencies": {
     "@testing-library/jest-dom": "^4.2.3",
@@ -47,11 +47,16 @@
     "test": "jest",
     "jest-watch": "npm run test -- --watch",
     "build": "tsc",
-    "tsc-watch": "tsc --watch --noEmit --project './tsconfig.json'"
+    "tsc-watch": "tsc --watch --noEmit --project './tsconfig.json'",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm test && npm run lint",
+    "preversion": "npm run lint",
+    "version": "npm run format && git add -A src",
+    "postversion": "git push && git push --tags"
   },
   "yalcWatch": {
     "watchFolder": "lib",
-    "buildWatchCommand": "echo 'Watching for file changes'",
+    "buildWatchCommand": "echo 'Watching for file changes in lib folder'",
     "extensions": "js"
   },
   "dependencies": {
