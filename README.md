@@ -13,7 +13,7 @@ Provides most commonly used i18n functionalities:
 ## Install
 
 ```bash
-npm install vanska/pikku-i18n
+npm install pikku-i18n
 ```
 
 ## Using pikku-i18n
