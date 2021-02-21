@@ -59,8 +59,5 @@
     "buildWatchCommand": "echo 'Watching for file changes in src'",
     "extensions": "js"
   },
-  "dependencies": {
-    "glob": "^7.1.6",
-    "log-beautify": "^1.2.0"
-  }
+  "dependencies": {}
 }
