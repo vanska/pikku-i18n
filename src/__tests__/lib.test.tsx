@@ -224,8 +224,8 @@ const withCorrectData = (function () {
             <Trans
               i18nKey="_locations"
               subs={{
-                locationsCount: <strong key="locations">20</strong>,
-                citiesCount: <strong key="cities">{4}</strong>,
+                locationsCount: <strong>20</strong>,
+                citiesCount: <strong>{4}</strong>,
                 helsinki: t("locations:helsinki"),
                 washington: t("locations:washington", {
                   usState: t("locations:usStates.ohio")
@@ -247,11 +247,7 @@ const withCorrectData = (function () {
             <Trans
               i18nKey="chosenLocation"
               subs={{
-                _chosenLocation: (
-                  <strong key="chosenLocation">
-                    {t("locations:helsinki")}
-                  </strong>
-                )
+                _chosenLocation: <strong>{t("locations:helsinki")}</strong>
               }}
             />
           )
@@ -269,8 +265,8 @@ const withCorrectData = (function () {
             <Trans
               i18nKey="locations"
               subs={{
-                locationsCount: <strong key="locations">20</strong>,
-                citiesCount: <strong key="cities">{4}</strong>,
+                locationsCount: <strong>20</strong>,
+                citiesCount: <strong>{4}</strong>,
                 // helsinki: t("locations:helsinki"),
                 washington: t("locations:washington", {
                   usState: t("locations:usStates.ohio")
