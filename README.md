@@ -72,7 +72,7 @@ The `Trans` component is used for wrapping the string variables inside a React n
 
 ```js
 import React from "react"
-import { init, t, Trans } from "vanska/pikku-i18n"
+import { init, t, Trans } from "pikku-i18n"
 import localeData from "./locales/en.json"
 
 export default function Component() {
@@ -176,16 +176,11 @@ yalc link pikku-i18n
 
 - Semantic release
 - yalc-watch build
-- NPM build on install
 - Typescript
-  - t()
-    - Add min string lengths to types
-  - Trans
-    - Throw type error on any value other than i18nKey or ns that is not a ReactNode
-- Tests
+  - Type concat in Trans
+  - Throw type error on any value other than i18nKey or ns that is not a ReactNode
+- Jest
   - Add tests for incorrect locale data
-  - i18n
-    - init()
-      - toThrow for incorrect locale data
+- init()
 - Trans
   - string substitution prop name needs to have an exact match with string variables
